@@ -22,16 +22,14 @@ def dht_init():
 
 bmp = bmp_init()
 sensor = dht_init()
+led = Pin(25, Pin.OUT)
 
-print("BMP Temp: " + str(bmp.temperature))
-print("BMP Pressure: " + str(bmp.pressure/100) + " hPa")
-
-#True while measuring
-#bmp.is_measuring
-#True while copying data to registers
-#bmp.is_updating
+led.value(1)
+print("BMP280 Temp: " + str(bmp.temperature) + " °C")
+print("BMP280 Pressure: " + str(bmp.pressure/100) + " hPa")
 
 t  = (sensor.temperature)
 h = (sensor.humidity)
-print("DHT11 Temperature: {}".format(sensor.temperature))
-print("DHT11 Humidity: {}".format(sensor.humidity))
+print("DHT11 Temperature: {}".format(sensor.temperature) + " °C")
+print("DHT11 Humidity: {}".format(sensor.humidity) + " %")
+led.value(0)
