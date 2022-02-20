@@ -1,29 +1,37 @@
-# Display Image & text on I2C driven ssd1306 OLED display 
-from machine import Pin, I2C
-from ssd1306 import SSD1306_I2C
-import framebuf
-import utime
+from machine import I2C, Pin
+from bmp280 import *
+import utime as time
+from dht import DHT11, InvalidChecksum
 
-WIDTH  = 128                                            # oled display width
-HEIGHT = 64                                             # oled display height
+def bmp_init():
+    bus = I2C(0, sda=Pin(0), scl=Pin(1)) 
+    bmp = BMP280(bus)
+    bmp.use_case(BMP280_CASE_WEATHER)
+    bmp.oversample(BMP280_OS_HIGH)
+    bmp.temp_os = BMP280_TEMP_OS_8
+    bmp.press_os = BMP280_PRES_OS_4
+    bmp.standby = BMP280_STANDBY_250
+    bmp.iir = BMP280_IIR_FILTER_2
+    bmp.spi3w = BMP280_SPI3W_ON
+    bmp.power_mode = BMP280_POWER_NORMAL
+    return bmp
+def dht_init():
+    pin = Pin(28, Pin.OUT, Pin.PULL_DOWN)
+    sensor = DHT11(pin)
+    return sensor
 
+bmp = bmp_init()
+sensor = dht_init()
 
-i2c = I2C(0, scl=Pin(1), sda=Pin(0))       # Init I2C using pins GP8 & GP9 (default I2C0 pins)
+print("BMP Temp: " + str(bmp.temperature))
+print("BMP Pressure: " + str(bmp.pressure/100) + " hPa")
 
-devices = i2c.scan()
+#True while measuring
+#bmp.is_measuring
+#True while copying data to registers
+#bmp.is_updating
 
-print("I2C Address      : "+hex(i2c.scan()[0]).upper()) # Display device address
-print("I2C Configuration: "+str(i2c))                   # Display I2C config
-
-oled = SSD1306_I2C(WIDTH, HEIGHT, i2c)                  # Init oled display
-
-
-# Clear the oled display in case it has junk on it.
-oled.fill(0)
-
-# Add some text
-oled.text("Raspberry Pi",5,5)
-oled.text("Pico",5,15)
-
-# Finally update the oled display so the image & text is displayed
-oled.show()
+t  = (sensor.temperature)
+h = (sensor.humidity)
+print("DHT11 Temperature: {}".format(sensor.temperature))
+print("DHT11 Humidity: {}".format(sensor.humidity))
