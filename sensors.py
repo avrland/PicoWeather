@@ -3,12 +3,7 @@ from bmp280 import *
 import utime as time
 from dht import DHT11, InvalidChecksum
 
-bmpSdaPin = 0
-bmpSclPin = 1
-bmpI2c = 0
-dht11Pin = 28
-
-def BmpInit():
+def BmpInit(bmpI2c, bmpSdaPin, bmpSclPin):
     bus = I2C(bmpI2c, sda=Pin(bmpSdaPin), scl=Pin(bmpSclPin)) 
     bmp = BMP280(bus)
     bmp.use_case(BMP280_CASE_WEATHER)
@@ -20,7 +15,7 @@ def BmpInit():
     bmp.spi3w = BMP280_SPI3W_ON
     bmp.power_mode = BMP280_POWER_NORMAL
     return bmp
-def DhtInit():
-    pin = Pin(dht11_pin, Pin.OUT, Pin.PULL_DOWN)
+def DhtInit(dht11Pin):
+    pin = Pin(dht11Pin, Pin.OUT, Pin.PULL_DOWN)
     sensor = DHT11(pin)
     return sensor
