@@ -4,10 +4,6 @@ import utime as time
 from dht import DHT11, InvalidChecksum
 
 class Sensors:
-    dhtT = 0
-    dhtRh = 0
-    bmpT = 0
-    bmpPres = 0
     def __init__(self, bmpI2c, bmpSdaPin, bmpSclPin, dht11Pin):
         self.bmpI2c = bmpI2c
         self.bmpSdaPin = bmpSdaPin
@@ -30,13 +26,10 @@ class Sensors:
         pin = Pin(self.dht11Pin, Pin.OUT, Pin.PULL_DOWN)
         self.dht = DHT11(pin)
         return self.dht
-    def getValues(self):
-        dhtT = self.dht.temperature
-        dhtRh = self.dht.humidity
-        bmpT = self.bmp.temperature
-        bmpPres = self.bmp.pressure/100
-
-newSensors = Sensors(1, 2, 3, 28)
-newSensors.BmpInit()
-newSensors.DhtInit()
-newSensors.getValues()
+    def GetValues(self):
+        values = []
+        values.append(self.dht.temperature)
+        values.append(self.dht.humidity)
+        values.append(self.bmp.temperature)
+        values.append(self.bmp.pressure/100)
+        return values
