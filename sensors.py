@@ -28,8 +28,8 @@ class Sensors:
         return self.dht
     def GetValues(self):
         values = []
-        values.append(self.dht.temperature)
-        values.append(self.dht.humidity)
         values.append(self.bmp.temperature)
         values.append(self.bmp.pressure/100)
+        values.append(self.dht.temperature)
+        values.append(self.dht.humidity)
         return values
