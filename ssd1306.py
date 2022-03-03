@@ -4,10 +4,10 @@ from ssd1306_driver import SSD1306_I2C
 debug = 0
 
 
-def SSD1306Init(i2c_id, scl, sda):
+def SSD1306Init(bus): #we pass i2cbus used in sensors.py here
     WIDTH  = 128                                            # oled display width
     HEIGHT = 32                                             # oled display height
-    i2c = I2C(i2c_id, scl=Pin(scl), sda=Pin(sda), freq=20000)       # Init I2C using pins GP8 & GP9 (default I2C0 pins)
+    i2c = bus
     if(debug):
         devices = i2c.scan()
         print("I2C Address      : "+hex(i2c.scan()[0]).upper()) # Display device address

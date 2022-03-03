@@ -10,7 +10,7 @@ class Sensors:
         self.bmpSclPin = bmpSclPin
         self.dht11Pin = dht11Pin
     def BmpInit(self):
-        bus = I2C(self.bmpI2c, sda=Pin(self.bmpSdaPin), scl=Pin(self.bmpSclPin)) 
+        bus = I2C(self.bmpI2c, sda=Pin(self.bmpSdaPin), scl=Pin(self.bmpSclPin), freq=100000) 
         bmp = BMP280(bus)
         bmp.use_case(BMP280_CASE_WEATHER)
         bmp.oversample(BMP280_OS_HIGH)
@@ -21,7 +21,7 @@ class Sensors:
         bmp.spi3w = BMP280_SPI3W_ON
         bmp.power_mode = BMP280_POWER_NORMAL
         self.bmp = bmp
-        return self.bmp
+        return bus
     def DhtInit(self):
         pin = Pin(self.dht11Pin, Pin.OUT, Pin.PULL_DOWN)
         self.dht = DHT11(pin)

@@ -6,10 +6,11 @@ import utime as time
 debug = 0
 tempNum = 1
 
-oled = SSD1306Init(0, 17, 16)
-newSensors = Sensors(1, 2, 3, 28)
-newSensors.BmpInit()
+
+newSensors = Sensors(0, 16, 17, 15)
+i2cbus = newSensors.BmpInit()
 newSensors.DhtInit()
+oled = SSD1306Init(i2cbus)
 
 def tick(timer):
     global newSensors, oled, ShowData, tempNum
