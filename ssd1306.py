@@ -14,13 +14,19 @@ def SSD1306Init(bus): #we pass i2cbus used in sensors.py here
         print("I2C Configuration: "+str(i2c))                   # Display I2C config
     oled = SSD1306_I2C(WIDTH, HEIGHT, i2c)                  # Init oled display
     return oled
-def ShowData(oled, values, t):
+def ShowData(oled, values, t, currentDateTime):
     oled.fill(0)
-    if(t==1):
-        oled.text("T1:{}".format(values[2]) + "C",0,0)
-    else:
-        oled.text("T2:{}".format(values[0]) + "C",40,0)
+    if(t==1): oled.text("T1:{}".format(values[2]) + "C",0,0)
+    if(t==2): oled.text("T2:{}".format(values[0]) + "C",40,0)
+    if(t>2): oled.text(PrepareTime(currentDateTime),0,0)
     oled.text("Rh: {}".format(values[3]) + " %",0,10)
     oled.text("p:{}".format(values[1]) + " hPa",0,20)
     oled.text
     oled.show()
+def PrepareTime(dateTime):
+    if(dateTime[4]<10): hours = "0" + str(dateTime[4])
+    else: hours = str(dateTime[4])
+    if(dateTime[5]<10): minutes = "0" + str(dateTime[5])
+    else: minutes = str(dateTime[4])
+    formatedDateTime = "Time: " + hours + ":" + minutes
+    return formatedDateTime
